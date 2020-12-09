@@ -1,0 +1,86 @@
+import ddf.minim.*;           //library for playing sound
+import processing.serial.*;   //library for serial communication with arduino
+//import gifAnimation.*;      //not used - in experiemtal mode 
+
+
+Serial port;              //define serial port
+
+Minim minim;              
+
+
+//Add audio files to the code
+//AudioPlayer asong;    //
+AudioPlayer bsong;
+
+void setup()
+{
+  size(500,500);
+  if (frame!=null)
+  { frame.setResizable(true);
+  }
+  //background(255);
+  //frameRate(100);
+  
+  println(Serial.list());
+  port = new Serial(this, "/dev/cu.usbmodem14201", 9600);
+  
+  minim = new Minim(this);
+  
+  //asong = minim.loadFile("a-song.mp3",2048);
+  bsong = minim.loadFile("horn.mp3",2048);
+ 
+  
+  port.bufferUntil('\n');
+  
+}
+
+void draw()
+{
+
+}
+
+
+void serialEvent(Serial port)
+{
+  String str = port.readStringUntil('\n');
+  //println(str);
+  
+  if (str != null){
+    str = trim(str); // removes white spaces
+  }
+  
+  //  if (str.equals("a"))
+  //{
+  //   background(255,168,0);    //orange
+  //   if(bsong.isPlaying())
+  //   {
+  //     bsong.pause();
+  //     bsong.rewind();
+  //   }
+  //   asong.play();
+  //   //asong.rewind();
+  //}
+  
+  if (str.equals("b"))
+  {
+     //background(0,222,255);  //skyblue
+     //if(asong.isPlaying())
+     //{
+     //  asong.pause();
+     //  asong.rewind();
+     //}
+     bsong.play();
+     bsong.rewind();
+  }
+  
+  
+}
+
+void stop()
+{
+  //asong.close();
+  bsong.close();
+  
+  minim.stop();
+  super.stop();
+}
